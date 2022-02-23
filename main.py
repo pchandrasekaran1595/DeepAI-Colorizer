@@ -2,6 +2,7 @@ import os
 import sys
 import shutil
 import requests
+# import webbrowser
 
 import warnings
 warnings.filterwarnings("ignore")
@@ -34,6 +35,9 @@ def main():
             "api-key" : os.environ["DEEPAI_KEY"],
         }
     )
+
+    # webbrowser.open(response.json()["output_url"])
+
     download = requests.get(response.json()["output_url"], stream=True)
     if download.status_code == 200:
         with open(os.path.join(SAVE_PATH, filename[:-4] + " - Colorized" + filename[-4:]), "wb") as f:
