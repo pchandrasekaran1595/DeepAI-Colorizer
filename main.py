@@ -23,24 +23,23 @@ def main():
 
 
     assert filename is not None, "No Image Specified"
-
-    if filename is not None:
-        assert filename in os.listdir(READ_PATH), "Image Not Found"
-        response = requests.post(
-            url=REQUEST_URL,
-            files={
-                "image" : open(os.path.join(READ_PATH, filename), "rb"),
-            },
-            headers={
-                "api-key" : os.environ["DEEPAI_KEY"],
-            }
-        )
-        download = requests.get(response.json()["output_url"], stream=True)
-        if download.status_code == 200:
-            with open(os.path.join(SAVE_PATH, filename[:-4] + " - Colorized" + filename[-4:]), "wb") as f:
-                shutil.copyfileobj(download.raw, f)
-        else:
-            print("Image couldn't be retrieved")
+    assert filename in os.listdir(READ_PATH), "Image Not Found"
+    
+    response = requests.post(
+        url=REQUEST_URL,
+        files={
+            "image" : open(os.path.join(READ_PATH, filename), "rb"),
+        },
+        headers={
+            "api-key" : os.environ["DEEPAI_KEY"],
+        }
+    )
+    download = requests.get(response.json()["output_url"], stream=True)
+    if download.status_code == 200:
+        with open(os.path.join(SAVE_PATH, filename[:-4] + " - Colorized" + filename[-4:]), "wb") as f:
+            shutil.copyfileobj(download.raw, f)
+    else:
+        print("Image couldn't be retrieved")
 
 
 if __name__ == "__main__":
